@@ -1,21 +1,21 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: netflix-app
+  name: netflix
   labels:
-    app: netflix-app
+    app: netflix
 spec:
-  replicas: 2
+  replicas: 1
   selector:
     matchLabels:
-      app: netflix-app
+      app: netflix
   template:
     metadata:
       labels:
-        app: netflix-app
+        app: netflix
     spec:
       containers:
-      - name: netflix-app
+      - name: netflix
         image: nagasatishdocker/netflix-deploy:latest
         ports:
         - containerPort: 3000
