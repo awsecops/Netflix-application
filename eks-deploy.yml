@@ -20,7 +20,7 @@ spec:
         role: rolling-update
     spec:
       containers:
-      - image: 084138576643.dkr.ecr.ap-south-1.amazonaws.com/code-build-nodeapp:latest
+      - image: 084138576643.dkr.ecr.ap-south-1.amazonaws.com/eks-netflix:latest
         imagePullPolicy: Always
         name: netflix-rolling-update
         ports:
