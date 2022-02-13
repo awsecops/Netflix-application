@@ -38,24 +38,3 @@ spec:
     rollingUpdate:
       maxSurge: 50%
       maxUnavailable: 50%
-      
-      ------------------------
-      
-apiVersion: v1
-kind: Service
-metadata:
-  labels:
-    app.kubernetes.io/name: netflix-rolling-update
-    app.kubernetes.io/instance: netflix-rolling-update
-    app.kubernetes.io/version: "1.0.0"
-    app.kubernetes.io/component: backend
-    app.kubernetes.io/managed-by: kubectl
-  name: nodejs-app-rolling-update
-spec:
-  selector:
-    app: netflix-rolling-update
-  type: LoadBalancer
-  ports:
-   -  protocol: TCP
-      port: 80
-      targetPort: 3000
