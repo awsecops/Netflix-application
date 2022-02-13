@@ -1,0 +1,61 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  metadata:
+  labels:
+    app.kubernetes.io/name: netflix-rolling-update
+    app.kubernetes.io/instance: netflix-rolling-update
+    app.kubernetes.io/version: '1.0.0'
+    app.kubernetes.io/managed-by: kubectl
+  name: netflix-rolling-update
+spec:
+  replicas: 4
+  selector:
+    matchLabels:
+      app: netflix-rolling-update
+  template:
+    metadata:
+      labels:
+        app: netflix-rolling-update
+        role: rolling-update
+    spec:
+      containers:
+      - image: 084138576643.dkr.ecr.ap-south-1.amazonaws.com/code-build-nodeapp:latest
+        imagePullPolicy: Always
+        name: netflix-rolling-update
+        ports:
+        - containerPort: 3000
+        readinessProbe:
+          httpGet:
+            path: /
+            port: 3000
+          initialDelaySeconds: 5
+          periodSeconds: 5
+          successThreshold: 1
+
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 50%
+      maxUnavailable: 50%
+      
+      ------------------------
+      
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app.kubernetes.io/name: netflix-rolling-update
+    app.kubernetes.io/instance: netflix-rolling-update
+    app.kubernetes.io/version: "1.0.0"
+    app.kubernetes.io/component: backend
+    app.kubernetes.io/managed-by: kubectl
+  name: nodejs-app-rolling-update
+spec:
+  selector:
+    app: netflix-rolling-update
+  type: LoadBalancer
+  ports:
+   -  protocol: TCP
+      port: 80
+      targetPort: 3000
