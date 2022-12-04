@@ -3,26 +3,26 @@ kind: Deployment
 metadata:
   metadata:
   labels:
-    app.kubernetes.io/name: netflix-rolling-update
-    app.kubernetes.io/instance: netflix-rolling-update
+    app.kubernetes.io/name: netflix
+    app.kubernetes.io/instance: netflix
     app.kubernetes.io/version: '1.0.0'
     app.kubernetes.io/managed-by: kubectl
   name: netflix-rolling-update
 spec:
-  replicas: 4
+  replicas: 2
   selector:
     matchLabels:
-      app: netflix-rolling-update
+      app: netflix
   template:
     metadata:
       labels:
-        app: netflix-rolling-update
+        app: netflix
         role: rolling-update
     spec:
       containers:
-      - image: 084138576643.dkr.ecr.ap-south-1.amazonaws.com/eks-netflix:latest
+      - image: 145282914747.dkr.ecr.us-east-2.amazonaws.com/sample-app:4
         imagePullPolicy: Always
-        name: netflix-rolling-update
+        name: netflix
         ports:
         - containerPort: 3000
         readinessProbe:
