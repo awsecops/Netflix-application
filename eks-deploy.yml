@@ -7,9 +7,15 @@ metadata:
     app.kubernetes.io/instance: netflix
     app.kubernetes.io/version: '1.0.0'
     app.kubernetes.io/managed-by: kubectl
-  name: netflix-rolling-update
+  name: netflix
+  namespace: netflix
 spec:
   replicas: 2
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 1
   selector:
     matchLabels:
       app: netflix
@@ -17,24 +23,25 @@ spec:
     metadata:
       labels:
         app: netflix
-        role: rolling-update
     spec:
       containers:
-      - image: 145282914747.dkr.ecr.us-east-2.amazonaws.com/sample-app:4
-        imagePullPolicy: Always
-        name: netflix
+      - name: netflix
+        image: 145282914747.dkr.ecr.us-east-2.amazonaws.com/sample-app:4
         ports:
         - containerPort: 3000
-        readinessProbe:
-          httpGet:
-            path: /
-            port: 3000
-          initialDelaySeconds: 5
-          periodSeconds: 5
-          successThreshold: 1
-
-  strategy:
-    type: RollingUpdate
-    rollingUpdate:
-      maxSurge: 50%
-      maxUnavailable: 50%
+        resources:
+          requests:
+            memory: "250Mi"
+            cpu: "200m"
+          limits:
+            memory: "1.5Gi"
+            cpu: "1000m"
+      affinity:
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+            - matchExpressions:
+              - key: role
+                operator: In
+                values:
+                - Netflix-live
