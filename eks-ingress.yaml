@@ -3,7 +3,7 @@ apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   name: netflix-ingress-externaldns
-  namespace: sbi
+  namespace: netflix
   annotations:
     # Load Balancer Name
     alb.ingress.kubernetes.io/load-balancer-name: netflix-dns-ingress
@@ -28,7 +28,7 @@ metadata:
     # External DNS - For creating a Record Set in Route53
     external-dns.alpha.kubernetes.io/hostname: netflix.myarts.live
 spec:
-  ingressClassName: sbi-ingress-class   # Ingress Class
+  ingressClassName: netflx-ingress-class   # Ingress Class
   defaultBackend:
     service:
       name: netflix
